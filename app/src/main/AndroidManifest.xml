@@ -13,12 +13,13 @@
         android:theme="@style/Theme.Talkables"
         tools:targetApi="31" >
         <meta-data
-            android:name="android.app.shortcuts"
-            android:resource="xml/shortcuts" />
+            android:name="com.google.android.actions"
+            android:resource="@xml/font" />
 
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:label="@string/app_name"
             android:theme="@style/Theme.Talkables" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
