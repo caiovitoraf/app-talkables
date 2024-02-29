@@ -12,9 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Talkables"
         tools:targetApi="31" >
+
         <meta-data
-            android:name="com.google.android.actions"
-            android:resource="xml/font" />
+            android:name="android.app.shortcuts"
+            android:resource="@xml/shortcuts" />
 
         <activity
             android:name=".MainActivity"

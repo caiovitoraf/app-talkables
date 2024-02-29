@@ -1,6 +1,7 @@
 package com.example.talkables
 
 import android.os.Bundle
+import android.view.View
 
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
@@ -70,8 +71,12 @@ class MainActivity : AppCompatActivity() {
         val textoCentral = findViewById<TextView>(R.id.texto_central)
 
         button.setOnClickListener {
-            val indiceAleatorio = Random.nextInt(palavras.size)
-            textoCentral.text = palavras[indiceAleatorio]
+            if (button.isEnabled) {
+                val indiceAleatorio = Random.nextInt(palavras.size)
+                textoCentral.text = palavras[indiceAleatorio]
+                button.isEnabled = false
+                button.visibility = View.GONE
+            }
         }
     }
 }
