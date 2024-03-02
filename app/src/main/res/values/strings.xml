@@ -3,4 +3,5 @@
     <string name="gerar_conversa">Gerar Conversa</string>
     <string name="proximo">proximo</string>
     <string name="anterior">anterior</string>
+    <string name="iniciar" />
 </resources>

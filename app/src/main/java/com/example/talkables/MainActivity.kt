@@ -64,58 +64,64 @@ class MainActivity : AppCompatActivity() {
         "Compartilhe uma experiência que o fez perceber o quanto é amado"
     )
 
-    private var indicesVisitados = mutableListOf<Int>()
+    private var sequenciaIndices = mutableListOf<Int>()
     private var indiceAtual = -1
+
+    private lateinit var button: Button
+    private lateinit var buttonAnterior: Button
+    private lateinit var buttonProximo: Button
+    private lateinit var textoCentral: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout)
 
-        val button = findViewById<Button>(R.id.button)
-        val buttonAnterior = findViewById<Button>(R.id.button_anterior)
-        val buttonProximo = findViewById<Button>(R.id.button_proximo)
-        val textoCentral = findViewById<TextView>(R.id.texto_central)
+        button = findViewById<Button>(R.id.button)
+        buttonAnterior = findViewById<Button>(R.id.button_anterior)
+        buttonProximo = findViewById<Button>(R.id.button_proximo)
+        textoCentral = findViewById<TextView>(R.id.texto_central)
 
-        buttonAnterior.visibility = View.GONE
-        buttonProximo.visibility = View.GONE
+        buttonAnterior.visibility = GONE
+        buttonProximo.visibility = GONE
 
         button.setOnClickListener {
-            if (button.isEnabled) {
-                val indiceAleatorio = Random.nextInt(palavras.size)
-                textoCentral.text = palavras[indiceAleatorio]
-                button.visibility = View.GONE
-                indiceAtual = indiceAleatorio
-                buttonProximo.visibility = View.VISIBLE
-                buttonAnterior.visibility = View.VISIBLE
-            }
+            gerarSequenciaAleatoria()
+            exibirProximaFrase()
+            button.visibility = GONE
         }
 
         buttonProximo.setOnClickListener {
-            if (indicesVisitados.isNotEmpty()) {
-                addIndexToVisitedList(indiceAtual)
-            }
-            val indiceAleatorio = getRandomIndex()
-            textoCentral.text = palavras[indiceAleatorio]
-            indiceAtual = indiceAleatorio
+            exibirProximaFrase()
         }
 
         buttonAnterior.setOnClickListener {
-            if (indicesVisitados.isNotEmpty()) {
-                val ultimoIndice = indicesVisitados.removeAt(indicesVisitados.size - 1)
-                textoCentral.text = palavras[ultimoIndice]
-                indiceAtual = ultimoIndice
-            }
+            exibirFraseAnterior()
         }
     }
 
-    private fun getRandomIndex(): Int {
-        var index: Int
-        do {
-            index = Random.nextInt(palavras.size)
-        } while (indicesVisitados.contains(index))
-        indicesVisitados.add(index)
-        return index
+    private fun gerarSequenciaAleatoria() {
+        sequenciaIndices = palavras.indices.shuffled().toMutableList()
+        indiceAtual = 0
     }
-    private fun addIndexToVisitedList(index: Int) {
-        indicesVisitados.add(index)
+
+    private fun exibirProximaFrase() {
+        if (indiceAtual < sequenciaIndices.size) {
+            textoCentral.text = palavras[sequenciaIndices[indiceAtual]]
+            indiceAtual++
+            atualizarVisibilidadeBotoes()
+        }
+    }
+
+    private fun exibirFraseAnterior() {
+        if (indiceAtual > 0) {
+            indiceAtual--
+            textoCentral.text = palavras[sequenciaIndices[indiceAtual]]
+            atualizarVisibilidadeBotoes()
+        }
+    }
+
+    private fun atualizarVisibilidadeBotoes() {
+        buttonAnterior.visibility = if (indiceAtual > 0) View.VISIBLE else GONE
+        buttonProximo.visibility = if (indiceAtual < sequenciaIndices.size - 1) View.VISIBLE else GONE
     }
 }
