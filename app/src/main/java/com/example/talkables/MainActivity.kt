@@ -2,6 +2,7 @@ package com.example.talkables
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.*
 
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
@@ -63,20 +64,58 @@ class MainActivity : AppCompatActivity() {
         "Compartilhe uma experiência que o fez perceber o quanto é amado"
     )
 
+    private var indicesVisitados = mutableListOf<Int>()
+    private var indiceAtual = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout)
 
         val button = findViewById<Button>(R.id.button)
+        val buttonAnterior = findViewById<Button>(R.id.button_anterior)
+        val buttonProximo = findViewById<Button>(R.id.button_proximo)
         val textoCentral = findViewById<TextView>(R.id.texto_central)
+
+        buttonAnterior.visibility = View.GONE
+        buttonProximo.visibility = View.GONE
 
         button.setOnClickListener {
             if (button.isEnabled) {
                 val indiceAleatorio = Random.nextInt(palavras.size)
                 textoCentral.text = palavras[indiceAleatorio]
-                button.isEnabled = false
                 button.visibility = View.GONE
+                indiceAtual = indiceAleatorio
+                buttonProximo.visibility = View.VISIBLE
+                buttonAnterior.visibility = View.VISIBLE
             }
         }
+
+        buttonProximo.setOnClickListener {
+            if (indicesVisitados.isNotEmpty()) {
+                addIndexToVisitedList(indiceAtual)
+            }
+            val indiceAleatorio = getRandomIndex()
+            textoCentral.text = palavras[indiceAleatorio]
+            indiceAtual = indiceAleatorio
+        }
+
+        buttonAnterior.setOnClickListener {
+            if (indicesVisitados.isNotEmpty()) {
+                val ultimoIndice = indicesVisitados.removeAt(indicesVisitados.size - 1)
+                textoCentral.text = palavras[ultimoIndice]
+                indiceAtual = ultimoIndice
+            }
+        }
+    }
+
+    private fun getRandomIndex(): Int {
+        var index: Int
+        do {
+            index = Random.nextInt(palavras.size)
+        } while (indicesVisitados.contains(index))
+        indicesVisitados.add(index)
+        return index
+    }
+    private fun addIndexToVisitedList(index: Int) {
+        indicesVisitados.add(index)
     }
 }
